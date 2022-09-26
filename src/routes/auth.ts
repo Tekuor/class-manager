@@ -8,10 +8,15 @@ import { RegisterValidation } from "./../validationClasses/auth/register";
 import { IRegisterResponse } from "../types/interfaces";
 import { ErrorException } from "../error-handler/error-exception";
 import { ErrorCode } from "../error-handler/error-code";
+import { nextTick } from "process";
 
 const router = express.Router();
 
-const login = async (request: Request, response: Response) => {
+const login = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { email, password } = request.body;
 
@@ -21,10 +26,12 @@ const login = async (request: Request, response: Response) => {
       const token = AuthService.generateAccessToken(user[0]);
       response.status(200).send({ token });
     } else {
-      throw new Error("Invalid Credentials");
+      throw new ErrorException(ErrorCode.Unauthenticated, [
+        "Invalid Credentials",
+      ]);
     }
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -43,7 +50,6 @@ const register = async (
     const { email } = request.body;
 
     const oldUser = await UserService.getUsers({ email });
-
     if (oldUser && oldUser.length) {
       throw new ErrorException(ErrorCode.ResourceExists, [
         "User already exists",
