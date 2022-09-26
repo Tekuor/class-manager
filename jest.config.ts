@@ -6,8 +6,14 @@ const config: Config.InitialOptions = {
     "^.+\\.tsx?$": "ts-jest",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
-  //   setupFilesAfterEnv: ["./src/tests/jest.setup.ts"],
-  globalSetup: "./src/tests/setup.ts",
-  globalTeardown: "./src/tests/teardown.ts",
+  coveragePathIgnorePatterns: [
+    "node_modules",
+    "test-config",
+    "interfaces",
+    "jestGlobalMocks.ts",
+    ".module.ts",
+    "<rootDir>/src/app.ts",
+    "<rootDir>/src/tests",
+  ],
 };
 export default config;
