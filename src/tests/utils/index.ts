@@ -7,7 +7,7 @@ export async function setupDatabase() {
   const uri = mongod.getUri();
   await mongoose
     .connect(`${uri}test`, {})
-    .then(() => console.log("connected"))
+    .then(() => {})
     .catch((e) => console.log(e));
 }
 

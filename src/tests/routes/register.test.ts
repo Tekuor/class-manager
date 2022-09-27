@@ -28,4 +28,19 @@ describe("POST /register", function () {
     expect(res.body.role).toEqual(registrationDetails.role);
     expect(res.body.status).toEqual("active");
   });
+
+  test("user should not be able to register if user already exists", async () => {
+    const registrationDetails = {
+      email: "teacher@gmail.com",
+      password: "pass126",
+      role: "teacher",
+    };
+    const res = await request
+      .post("/api/v1/register")
+      .send(registrationDetails);
+
+    expect(res.statusCode).toBe(409);
+    expect(res.body.errorMessage[0]).toEqual("User already exists");
+    expect(res.body.name).toEqual("ResourceExists");
+  });
 });

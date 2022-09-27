@@ -8,7 +8,6 @@ import { RegisterValidation } from "./../validationClasses/auth/register";
 import { IRegisterResponse } from "../types/interfaces";
 import { ErrorException } from "../error-handler/error-exception";
 import { ErrorCode } from "../error-handler/error-code";
-import { nextTick } from "process";
 
 const router = express.Router();
 
@@ -21,8 +20,7 @@ const login = async (
     const { email, password } = request.body;
 
     const user = await UserService.getUsers({ email });
-
-    if (user && (await bcrypt.compare(password, user[0].password))) {
+    if (user.length && (await bcrypt.compare(password, user[0].password))) {
       const token = AuthService.generateAccessToken(user[0]);
       response.status(200).send({ token });
     } else {
