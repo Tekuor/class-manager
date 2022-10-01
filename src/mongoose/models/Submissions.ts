@@ -12,6 +12,7 @@ export interface ISubmission extends Document {
   marks: string;
   status: string;
   comment?: string;
+  isDeleted: Boolean;
 }
 
 const SubmissionSchema: Schema = new Schema(
@@ -22,6 +23,7 @@ const SubmissionSchema: Schema = new Schema(
     marks: { type: Number },
     status: { type: String, required: true },
     comment: { type: String },
+    isDeleted: { type: Boolean, defailt: false },
   },
   SubmissionSchemaOptions
 );

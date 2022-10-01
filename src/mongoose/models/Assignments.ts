@@ -12,6 +12,7 @@ export interface IAssignment extends Document {
   teacherId: Types.ObjectId;
   attachments?: string[];
   deadline: Date;
+  isDeleted: Boolean;
 }
 
 const AssignmentSchema: Schema = new Schema(
@@ -22,6 +23,7 @@ const AssignmentSchema: Schema = new Schema(
     classId: { type: Types.ObjectId, required: true },
     teacherId: { type: Types.ObjectId, required: true },
     deadline: { type: Date },
+    isDeleted: { type: Boolean, defailt: false },
   },
   AssignmentSchemaOptions
 );

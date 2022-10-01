@@ -15,6 +15,7 @@ export interface IUser extends Document {
   role: IUserRole;
   status: IUserStatus;
   profileImage?: string;
+  isDeleted: Boolean;
 }
 
 const UserSchema: Schema = new Schema(
@@ -24,6 +25,7 @@ const UserSchema: Schema = new Schema(
     role: { type: String, enum: userRoles, required: true },
     status: { type: String, enum: userStatus, required: true },
     profileImage: { type: String },
+    isDeleted: { type: Boolean, defailt: false },
   },
   UserSchemaOptions
 );

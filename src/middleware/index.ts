@@ -5,31 +5,29 @@ import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { ErrorException } from "../error-handler/error-exception";
 import { ErrorCode } from "../error-handler/error-code";
-const { TOKEN_SECRET = "" } = process.env;
 
 class MiddlewareService {
-  checkAuthentication = (
-    req: Request & { user: IRequestUser },
-    res: Response,
-    next: any
-  ) => {
+  checkAuthentication = (req: Request, res: Response, next: any) => {
     const authHeader = req.headers["authorization"];
+    const { TOKEN_SECRET = "" } = process.env;
     const token = authHeader && authHeader.split(" ")[1];
+    if (token == null) {
+      const err = new ErrorException(ErrorCode.Unauthenticated);
+      next(err);
+    }
 
-    if (token == null) return res.sendStatus(401);
-
-    jwt.verify(token, TOKEN_SECRET as string, (err: any, user: any) => {
-      console.log(err);
-
-      if (err) {
-        const err = new ErrorException(ErrorCode.Forbidden);
-        next(err);
+    jwt.verify(
+      token as string,
+      TOKEN_SECRET as string,
+      (err: any, user: any) => {
+        if (err) {
+          const err = new ErrorException(ErrorCode.Forbidden);
+          next(err);
+        }
+        (req as Request & { user: IRequestUser }).user = user;
+        next();
       }
-
-      req.user = user;
-
-      next();
-    });
+    );
   };
 
   requestValidation = (validationClass: any) => {
@@ -53,6 +51,18 @@ class MiddlewareService {
           next();
         }
       });
+    };
+  };
+
+  hasAccessToResource = (validRoles: string[]) => {
+    return function (req: Request, res: Response, next: NextFunction) {
+      const userRole = (req as Request & { user: IRequestUser }).user.role;
+      if (validRoles.includes(userRole)) {
+        next();
+      } else {
+        const err = new ErrorException(ErrorCode.Forbidden);
+        next(err);
+      }
     };
   };
 }

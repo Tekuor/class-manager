@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import AuthService from "../services/auth";
 import UserService from "../services/users";
 import { LoginValidation } from "../validationClasses/auth/login";
-import MiddlewareService from "../middleware/index";
+import Middleware from "../middleware/index";
 import { RegisterValidation } from "./../validationClasses/auth/register";
 import { IRegisterResponse } from "../types/interfaces";
 import { ErrorException } from "../error-handler/error-exception";
@@ -33,11 +33,7 @@ const login = async (
   }
 };
 
-router.post(
-  "/login",
-  [MiddlewareService.requestValidation(LoginValidation)],
-  login
-);
+router.post("/login", [Middleware.requestValidation(LoginValidation)], login);
 
 const register = async (
   request: Request,
@@ -68,7 +64,7 @@ const register = async (
 
 router.post(
   "/register",
-  [MiddlewareService.requestValidation(RegisterValidation)],
+  [Middleware.requestValidation(RegisterValidation)],
   register
 );
 

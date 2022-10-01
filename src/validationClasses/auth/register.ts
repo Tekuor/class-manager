@@ -1,4 +1,4 @@
-import { IsDefined, IsEmail, IsString, IsIn } from "class-validator";
+import { IsDefined, IsEmail, IsIn } from "class-validator";
 import { Expose } from "class-transformer";
 import { userRoles } from "../../mongoose/models/Users";
 

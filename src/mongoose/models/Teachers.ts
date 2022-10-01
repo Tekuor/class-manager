@@ -7,6 +7,7 @@ export interface ITeacher extends Document {
   lastName: string;
   classIds: Types.ObjectId[];
   phone: string;
+  isDeleted: Boolean;
 }
 
 const TeacherSchema: Schema = new Schema(
@@ -15,6 +16,7 @@ const TeacherSchema: Schema = new Schema(
     lastName: { type: String, required: true },
     classIds: { type: [Types.ObjectId], required: true },
     phone: { type: String, required: true },
+    isDeleted: { type: Boolean, defailt: false },
   },
   TeacherSchemaOptions
 );

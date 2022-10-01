@@ -7,6 +7,7 @@ export interface IStudent extends Document {
   lastName: string;
   classId: Types.ObjectId;
   dateOfBirth: Date;
+  isDeleted: boolean;
 }
 
 const StudentSchema: Schema = new Schema(
@@ -15,6 +16,7 @@ const StudentSchema: Schema = new Schema(
     lastName: { type: String, required: true },
     classId: { type: Types.ObjectId, required: true },
     dateOfBirth: { type: Date, required: true },
+    isDeleted: { type: Boolean, defailt: false },
   },
   StudentSchemaOptions
 );

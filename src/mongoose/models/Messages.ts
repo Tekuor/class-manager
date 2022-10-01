@@ -12,6 +12,7 @@ export interface IMessage extends Document {
   deliveryDate: string;
   recipientIds: Types.ObjectId[];
   teacherId: Types.ObjectId;
+  isDeleted: Boolean;
 }
 
 const MessageSchema: Schema = new Schema(
@@ -22,6 +23,7 @@ const MessageSchema: Schema = new Schema(
     deliveryDate: { type: Date, required: true },
     recipientIds: { type: Types.ObjectId, required: true },
     teacherId: { type: Types.ObjectId },
+    isDeleted: { type: Boolean, defailt: false },
   },
   MessageSchemaOptions
 );
