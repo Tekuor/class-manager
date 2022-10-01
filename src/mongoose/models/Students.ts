@@ -21,4 +21,4 @@ const StudentSchema: Schema = new Schema(
   StudentSchemaOptions
 );
 
-export default mongoose.model<IStudent>("Student", StudentSchema);
+export const Student = mongoose.model<IStudent>("Student", StudentSchema);

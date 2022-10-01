@@ -15,7 +15,7 @@ class __singleResource__(pascalCase)Service {
 
   async update__singleResource__(pascalCase)(
     data: I__singleResource__(pascalCase),
-    id: Types.ObjectId
+    id: Types.ObjectId | string
   ) {
     try {
       const response = await __singleResource__(pascalCase).findByIdAndUpdate(id, data);
@@ -25,7 +25,7 @@ class __singleResource__(pascalCase)Service {
     }
   }
 
-  async get__singleResource__(pascalCase)(id: Types.ObjectId) {
+  async get__singleResource__(pascalCase)(id: Types.ObjectId | string) {
     try {
       const response = await __singleResource__(pascalCase).findById(id);
       return response;
@@ -43,8 +43,10 @@ class __singleResource__(pascalCase)Service {
     }
   }
 
-  async delete__singleResource__(pascalCase)() {
+  async delete__singleResource__(pascalCase)(id: Types.ObjectId | string) {
     try {
+      const response = await  __singleResource__(pascalCase).findByIdAndUpdate(id, { isDeleted: true });
+      return response;
     } catch (e: any) {
       // throw new Error(e.message);
     }
