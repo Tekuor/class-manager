@@ -1,8 +1,8 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const StudentSchemaOptions = { toJSON: { virtuals: true }, timestamps: true };
 
-export interface IStudent extends Document {
+export interface IStudent {
   firstName: string;
   lastName: string;
   classId: Types.ObjectId;
