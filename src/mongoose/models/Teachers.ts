@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 
 const TeacherSchemaOptions = { toJSON: { virtuals: true }, timestamps: true };
 
-export interface ITeacher extends Document {
+export interface ITeacher {
   firstName: string;
   lastName: string;
   classIds: Types.ObjectId[];
@@ -21,4 +21,4 @@ const TeacherSchema: Schema = new Schema(
   TeacherSchemaOptions
 );
 
-export default mongoose.model<ITeacher>("Teacher", TeacherSchema);
+export const Teacher = mongoose.model<ITeacher>("Teacher", TeacherSchema);

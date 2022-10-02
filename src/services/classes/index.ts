@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Types } from "mongoose";
 import { Class } from "../../mongoose/models/Classes";
 import { IClass } from "./../../mongoose/models/Classes";

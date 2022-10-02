@@ -1,4 +1,4 @@
-import { IsString, IsDate } from "class-validator";
+import { IsString, IsDate, IsMongoId } from "class-validator";
 import { Expose } from "class-transformer";
 
 export class UpdateStudentValidation {
@@ -11,7 +11,7 @@ export class UpdateStudentValidation {
   lastName: String;
 
   @Expose()
-  @IsString()
+  @IsMongoId()
   classId: String;
 
   @Expose()

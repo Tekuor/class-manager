@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import StudentService from "../services/students";
 import Middleware from "../middleware/index";
 import { CreateStudentValidation } from "../validationClasses/students/createStudent";
-import { UpdateStudentValidation } from "./../validationClasses/students/updateStudents";
+import { UpdateStudentValidation } from "../validationClasses/students/updateStudent";
 
 const router = express.Router();
 
