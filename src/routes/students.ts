@@ -3,6 +3,10 @@ import StudentService from "../services/students";
 import Middleware from "../middleware/index";
 import { CreateStudentValidation } from "../validationClasses/students/createStudent";
 import { UpdateStudentValidation } from "../validationClasses/students/updateStudent";
+import multer from "multer";
+import { csvToJson } from "../services/csvToJson";
+
+const upload = multer({ dest: "tmp/" });
 
 const router = express.Router();
 
@@ -15,7 +19,7 @@ const createStudent = async (request: Request, response: Response) => {
       dateOfBirth,
       classId,
     });
-    response.status(200).send({});
+    response.status(200).send(data);
   } catch (error) {
     response.status(400).send(error);
   }
@@ -99,4 +103,24 @@ router.delete(
   deleteStudent
 );
 
+const uploadStudents = async (request: Request, response: Response) => {
+  try {
+    const file: any = request.file ? request.file : {};
+    await csvToJson(`${file.filename}`);
+    console.log(file);
+    response.status(200).send({ data: "Students uploaded successfully" });
+  } catch (error) {
+    response.status(400).send(error);
+  }
+};
+
+router.post(
+  "/students/upload",
+  [
+    upload.single("file"),
+    Middleware.checkAuthentication,
+    Middleware.hasAccessToResource(["teacher"]),
+  ],
+  uploadStudents
+);
 export default router;

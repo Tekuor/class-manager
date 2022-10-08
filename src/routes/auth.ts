@@ -49,7 +49,7 @@ const register = async (
         "User already exists",
       ]);
     }
-
+    request.body.status = "active";
     const user = await UserService.createUser(request.body);
     let data = {} as IRegisterResponse;
     if (user) {

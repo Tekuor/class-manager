@@ -39,6 +39,15 @@ class ClassService {
     }
   }
 
+  async getClassBy(query: any) {
+    try {
+      const response = await Class.findOne(query);
+      return response;
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
   async deleteClass(id: Types.ObjectId | string) {
     try {
       const response = await Class.findByIdAndUpdate(id, { isDeleted: true });

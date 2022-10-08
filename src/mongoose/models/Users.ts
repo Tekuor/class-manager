@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, HydratedDocument } from "mongoose";
+import mongoose, { Schema, Document, HydratedDocument, Types } from "mongoose";
 import hashPassword from "../hooks/pre/userPassword";
 
 const UserSchemaOptions = { toJSON: { virtuals: true }, timestamps: true };
@@ -6,16 +6,17 @@ const UserSchemaOptions = { toJSON: { virtuals: true }, timestamps: true };
 export type IUserRole = "teacher" | "student";
 export const userRoles = ["teacher", "student"];
 
-export type IUserStatus = "active" | "pending";
-export const userStatus = ["active", "pending"];
+export type IUserStatus = "active" | "pending" | "pendingClaim";
+export const userStatus = ["active", "pending", "pendingClaim"];
 
-export interface IUser extends Document {
+export interface IUser {
   email: string;
   password: string;
   role: IUserRole;
   status: IUserStatus;
   profileImage?: string;
   isDeleted: Boolean;
+  accountId: Types.ObjectId;
 }
 
 const UserSchema: Schema = new Schema(
@@ -25,6 +26,7 @@ const UserSchema: Schema = new Schema(
     role: { type: String, enum: userRoles, required: true },
     status: { type: String, enum: userStatus, required: true },
     profileImage: { type: String },
+    accountId: { type: Types.ObjectId, required: true },
     isDeleted: { type: Boolean, defailt: false },
   },
   UserSchemaOptions

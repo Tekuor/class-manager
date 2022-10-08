@@ -3,9 +3,8 @@ import { User } from "../../mongoose/models/Users";
 import { IUser } from "./../../mongoose/models/Users";
 
 class UserService {
-  async createUser(data: IUser) {
+  async createUser(data: Omit<IUser, "isDeleted">) {
     try {
-      data.status = "active";
       const response = await User.create(data);
       return response;
     } catch (e: any) {
