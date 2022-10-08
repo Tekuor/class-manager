@@ -8,6 +8,7 @@ import { RegisterValidation } from "./../validationClasses/auth/register";
 import { IRegisterResponse } from "../types/interfaces";
 import { ErrorException } from "../error-handler/error-exception";
 import { ErrorCode } from "../error-handler/error-code";
+import TeacherService from "../services/teachers";
 
 const router = express.Router();
 
@@ -49,12 +50,23 @@ const register = async (
         "User already exists",
       ]);
     }
-    request.body.status = "active";
-    const user = await UserService.createUser(request.body);
-    let data = {} as IRegisterResponse;
+    const data: any = request.body;
+    const teacher = await TeacherService.createTeacher({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+    });
+    const user = await UserService.createUser({
+      email: data.email,
+      accountId: teacher._id,
+      password: data.password,
+      role: "teacher",
+      status: "active",
+    });
+    let result = {} as IRegisterResponse;
     if (user) {
       const token = AuthService.generateAccessToken(user);
-      data.token = token;
+      result.token = token;
     }
     response.status(201).json(user);
   } catch (err: any) {

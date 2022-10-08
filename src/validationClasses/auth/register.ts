@@ -1,6 +1,5 @@
-import { IsDefined, IsEmail, IsIn } from "class-validator";
+import { IsDefined, IsEmail, IsString, MaxLength } from "class-validator";
 import { Expose } from "class-transformer";
-import { userRoles } from "../../mongoose/models/Users";
 
 export class RegisterValidation {
   @IsDefined()
@@ -14,6 +13,16 @@ export class RegisterValidation {
 
   @IsDefined()
   @Expose()
-  @IsIn(userRoles)
-  role: String;
+  @IsString()
+  firstName: String;
+
+  @IsDefined()
+  @Expose()
+  @IsString()
+  lastName: String;
+
+  @IsDefined()
+  @Expose()
+  @MaxLength(10)
+  phone: String;
 }
