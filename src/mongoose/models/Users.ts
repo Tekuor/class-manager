@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document, HydratedDocument, Types } from "mongoose";
+import mongoose, { Schema, HydratedDocument, Types } from "mongoose";
 import hashPassword from "../hooks/pre/userPassword";
-
+import bcrypt from "bcrypt";
 const UserSchemaOptions = { toJSON: { virtuals: true }, timestamps: true };
 
 export type IUserRole = "teacher" | "student";
@@ -37,6 +37,19 @@ UserSchema.pre(
   async function (this: HydratedDocument<IUser>, next: any) {
     const user = this;
     await hashPassword(user);
+    next();
+  }
+);
+
+UserSchema.pre(
+  "findOneAndUpdate",
+  async function (this: HydratedDocument<IUser>, next: any) {
+    const user = (this as any)._update;
+    if (user.password) {
+      const encryptedUserPassword = await bcrypt.hash(user.password, 10);
+      user.password = encryptedUserPassword;
+      next();
+    }
     next();
   }
 );

@@ -1,7 +1,11 @@
 import { Types } from "mongoose";
-import { User } from "../../mongoose/models/Users";
+import { IUserRole, User } from "../../mongoose/models/Users";
 import { IUser } from "./../../mongoose/models/Users";
 
+interface IUserUpdate {
+  status: IUserRole;
+  password: string;
+}
 class UserService {
   async createUser(data: Omit<IUser, "isDeleted">) {
     try {
@@ -12,7 +16,7 @@ class UserService {
     }
   }
 
-  async updateUser(data: IUser, id: Types.ObjectId) {
+  async updateUser(data: Partial<IUserUpdate>, id: Types.ObjectId) {
     try {
       const response = await User.findByIdAndUpdate(id, data);
       return response;
@@ -24,6 +28,15 @@ class UserService {
   async getUser(id: Types.ObjectId) {
     try {
       const response = await User.findById(id);
+      return response;
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
+  async getOneUser(query: any) {
+    try {
+      const response = await User.findOne(query);
       return response;
     } catch (e: any) {
       throw new Error(e.message);

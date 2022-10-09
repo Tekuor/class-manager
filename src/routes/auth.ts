@@ -9,6 +9,8 @@ import { IRegisterResponse } from "../types/interfaces";
 import { ErrorException } from "../error-handler/error-exception";
 import { ErrorCode } from "../error-handler/error-code";
 import TeacherService from "../services/teachers";
+import { ChangePasswordValidation } from "../validationClasses/auth/changePassword";
+import { IUser } from "./../mongoose/models/Users";
 
 const router = express.Router();
 
@@ -78,6 +80,39 @@ router.post(
   "/register",
   [Middleware.requestValidation(RegisterValidation)],
   register
+);
+
+const changePassword = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const { oldPassword, newPassword } = request.body;
+    const { email } = (request as any).user;
+    const user = await UserService.getOneUser({ email });
+    if (user) {
+      const result = await bcrypt.compare(oldPassword, user.password);
+      if (result) {
+        await UserService.updateUser({ password: newPassword }, user._id);
+      } else {
+        throw new Error("Password could not be changed");
+      }
+    }
+
+    response.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+router.put(
+  "/change-password",
+  [
+    Middleware.checkAuthentication,
+    Middleware.requestValidation(ChangePasswordValidation),
+  ],
+  changePassword
 );
 
 export default router;
