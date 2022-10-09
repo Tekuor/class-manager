@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import StudentService from "../services/students";
 import Middleware from "../middleware/index";
 import { CreateStudentValidation } from "../validationClasses/students/createStudent";
@@ -10,7 +10,11 @@ const upload = multer({ dest: "tmp/" });
 
 const router = express.Router();
 
-const createStudent = async (request: Request, response: Response) => {
+const createStudent = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { firstName, lastName, dateOfBirth, classId } = request.body;
     const data = await StudentService.createStudent({
@@ -21,7 +25,7 @@ const createStudent = async (request: Request, response: Response) => {
     });
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -35,14 +39,18 @@ router.post(
   createStudent
 );
 
-const updateStudent = async (request: Request, response: Response) => {
+const updateStudent = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const body = request.body;
     const { studentId } = request.params;
     const data = await StudentService.updateStudent(body, studentId);
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -56,12 +64,16 @@ router.put(
   updateStudent
 );
 
-const getStudents = async (request: Request, response: Response) => {
+const getStudents = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const data = await StudentService.getStudents({});
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -71,13 +83,17 @@ router.get(
   getStudents
 );
 
-const getStudent = async (request: Request, response: Response) => {
+const getStudent = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { studentId } = request.params;
     const data = await StudentService.getStudent(studentId);
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -87,13 +103,17 @@ router.get(
   getStudent
 );
 
-const deleteStudent = async (request: Request, response: Response) => {
+const deleteStudent = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { studentId } = request.params;
     const data = await StudentService.deleteStudent(studentId);
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -103,14 +123,18 @@ router.delete(
   deleteStudent
 );
 
-const uploadStudents = async (request: Request, response: Response) => {
+const uploadStudents = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const file: any = request.file ? request.file : {};
     await csvToJson(`${file.filename}`);
     console.log(file);
     response.status(200).send({ data: "Students uploaded successfully" });
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 

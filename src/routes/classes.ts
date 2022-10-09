@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import Middleware from "../middleware/index";
 import ClassService from "../services/classes";
 import { CreateClassValidation } from "../validationClasses/class/createClass";
@@ -6,13 +6,17 @@ import { UpdateClassValidation } from "../validationClasses/class/updateClass";
 
 const router = express.Router();
 
-const createClass = async (request: Request, response: Response) => {
+const createClass = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { name, description } = request.body;
     const data = await ClassService.createClass({ name, description });
     response.status(201).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -26,14 +30,18 @@ router.post(
   createClass
 );
 
-const updateClass = async (request: Request, response: Response) => {
+const updateClass = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const body = request.body;
     const { classId } = request.params;
     const data = await ClassService.updateClass(body, classId);
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -47,12 +55,16 @@ router.put(
   updateClass
 );
 
-const getClasses = async (request: Request, response: Response) => {
+const getClasses = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const data = await ClassService.getClasses({});
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -62,13 +74,17 @@ router.get(
   getClasses
 );
 
-const getClass = async (request: Request, response: Response) => {
+const getClass = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { classId } = request.params;
     const data = await ClassService.getClass(classId);
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
@@ -78,13 +94,17 @@ router.get(
   getClass
 );
 
-const deleteClass = async (request: Request, response: Response) => {
+const deleteClass = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const { classId } = request.params;
     const data = await ClassService.deleteClass(classId);
     response.status(200).send(data);
   } catch (error) {
-    response.status(400).send(error);
+    next(error);
   }
 };
 
