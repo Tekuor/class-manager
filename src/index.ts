@@ -1,8 +1,15 @@
 import app from "./app";
 import mongoose from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
 
-const { MONGODB_URL = "" } = process.env;
+const { MONGODB_URL = "", CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 mongoose.connect(MONGODB_URL, {});
+
+cloudinary.config({
+  cloud_name: CLOUD_NAME,
+  api_key: API_KEY,
+  api_secret: API_SECRET,
+});
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);

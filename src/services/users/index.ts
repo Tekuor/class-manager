@@ -5,6 +5,7 @@ import { IUser } from "./../../mongoose/models/Users";
 interface IUserUpdate {
   status: IUserRole;
   password: string;
+  profileImage: string;
 }
 class UserService {
   async createUser(data: Omit<IUser, "isDeleted">) {

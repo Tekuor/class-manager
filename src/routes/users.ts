@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import Middleware from "../middleware/index";
+import MediaService from "../services/media";
+import UserService from "../services/users";
 const upload = multer({ dest: "tmp/" });
 
 const router = express.Router();
@@ -11,9 +13,17 @@ const updateProfileImage = async (
   next: NextFunction
 ) => {
   try {
-    const files = request.files ? request.files : [];
-    const uploadedFiles = await MediaService.uploadFiles(files);
-    response.status(200).send({ data: uploadedFiles });
+    const file: any = request.file ? request.file : {};
+    const uploadedFiles = await MediaService.uploadFiles(
+      [file],
+      "profileImages"
+    );
+    const requestUser = (request as any).user;
+    const user = await UserService.updateUser(
+      { profileImage: uploadedFiles[0] },
+      requestUser._id
+    );
+    response.status(200).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -21,7 +31,7 @@ const updateProfileImage = async (
 
 router.put(
   "/profile-image",
-  [upload.single("prifileImage"), Middleware.checkAuthentication],
+  [upload.single("profileImage"), Middleware.checkAuthentication],
   updateProfileImage
 );
 

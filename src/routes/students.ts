@@ -4,7 +4,7 @@ import Middleware from "../middleware/index";
 import { CreateStudentValidation } from "../validationClasses/students/createStudent";
 import { UpdateStudentValidation } from "../validationClasses/students/updateStudent";
 import multer from "multer";
-import { csvToJson } from "../services/csvToJson";
+import MediaService from "../services/media";
 
 const upload = multer({ dest: "tmp/" });
 
@@ -130,7 +130,7 @@ const uploadStudents = async (
 ) => {
   try {
     const file: any = request.file ? request.file : {};
-    await csvToJson(`${file.filename}`);
+    await MediaService.csvToJson(`${file.filename}`);
     console.log(file);
     response.status(200).send({ data: "Students uploaded successfully" });
   } catch (error) {
