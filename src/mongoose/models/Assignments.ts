@@ -1,11 +1,11 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const AssignmentSchemaOptions = {
   toJSON: { virtuals: true },
   timestamps: true,
 };
 
-export interface IAssignment extends Document {
+export interface IAssignment {
   name: string;
   description?: string;
   classId: Types.ObjectId;
@@ -28,4 +28,7 @@ const AssignmentSchema: Schema = new Schema(
   AssignmentSchemaOptions
 );
 
-export default mongoose.model<IAssignment>("Assignment", AssignmentSchema);
+export const Assignment = mongoose.model<IAssignment>(
+  "Assignment",
+  AssignmentSchema
+);
